@@ -1,0 +1,26 @@
+image: hashicorp/terraform:1.5.0  # Use the official Terraform Docker image
+
+pipelines:
+  default:
+    - step:
+        name: Terraform Init & Apply
+        script:
+          - export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
+          - export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
+
+          # Change to the directory where your Terraform configuration files are located
+          - cd infra
+
+          # Initialize Terraform
+          - terraform init
+
+          # Validate the Terraform configuration
+          - terraform validate
+
+          # Plan the Terraform deployment
+          - terraform plan -out=tfplan
+
+          # Apply the Terraform plan
+          - terraform apply -auto-approve tfplan
+
+           echo "Terraform apply completed."
